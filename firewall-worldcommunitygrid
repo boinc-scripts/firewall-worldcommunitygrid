@@ -13,6 +13,8 @@ ip6tables -P FORWARD DROP
 
 #Allow DNS
 iptables -A OUTPUT -p udp  --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp  --sport 53 -j ACCEPT
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
 iptables -A INPUT -p udp --sport 53 -j ACCEPT
 
 # allow WCG addresses
