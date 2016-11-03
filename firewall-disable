@@ -1,0 +1,19 @@
+#!/bin/bash
+# Script to disable the firewall and accept all connections
+# Usage: bash firewall-disable
+
+# Flush (remove all rules)
+iptables -F
+
+# Set ACCEPT as default policy
+iptables -P OUTPUT ACCEPT
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+
+ip6tables -P OUTPUT ACCEPT
+ip6tables -P INPUT ACCEPT
+ip6tables -P FORWARD ACCEPT
+
+# Display iptables
+iptables -L
+

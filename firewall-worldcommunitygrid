@@ -1,0 +1,30 @@
+#!/bin/bash
+# Script to set a firewall that block all connections except those used by running Boinc with "The World Community Grid" as project.
+# Usage: bash firewall-worldcommunitygrid
+
+# set DROP default policy
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+ip6tables -P INPUT DROP
+ip6tables -P OUTPUT DROP
+ip6tables -P FORWARD DROP
+
+#Allow DNS
+iptables -A OUTPUT -p udp  --dport 53 -j ACCEPT
+iptables -A INPUT -p udp --sport 53 -j ACCEPT
+
+# allow WCG addresses
+iptables -A INPUT -s 198.20.8.246 -j ACCEPT
+iptables -A OUTPUT -d 198.20.8.246 -j ACCEPT
+
+# allow boinc port 31416
+iptables -A INPUT -p tcp --sport 31416 -j ACCEPT
+iptables -A INPUT -p tcp --dport 31416 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 31416 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 31416 -j ACCEPT
+
+# display iptables
+
+iptables -L
