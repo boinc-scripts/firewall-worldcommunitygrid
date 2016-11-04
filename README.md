@@ -1,6 +1,6 @@
 # Overview
 
-Script to set a firewall that block all connections except those used by running [Boinc](https://boinc.berkeley.edu) with only [The World Community Grid](https://www.worldcommunitygrid.org/) as project
+Script to set a firewall that blocks all connections except those used by [Boinc](https://boinc.berkeley.edu) with only [The World Community Grid](https://www.worldcommunitygrid.org/) as project
 
 # Usage
 
