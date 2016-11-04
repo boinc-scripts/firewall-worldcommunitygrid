@@ -3,30 +3,31 @@
 # Usage: bash firewall-worldcommunitygrid
 
 # set DROP default policy
-iptables -P INPUT DROP
-iptables -P OUTPUT DROP
-iptables -P FORWARD DROP
+iptables -P INPUT   DROP
+iptables -P OUTPUT  DROP
+iptables -P FORWARD  DROP
 
-ip6tables -P INPUT DROP
-ip6tables -P OUTPUT DROP
-ip6tables -P FORWARD DROP
+#Allow loopback interface
+iptables -A INPUT -i lo  -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A FORWARD -i lo -j ACCEPT
 
-#Allow DNS
-iptables -A OUTPUT -p udp  --dport 53 -j ACCEPT
-iptables -A OUTPUT -p udp  --sport 53 -j ACCEPT
-iptables -A INPUT -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -p udp --sport 53 -j ACCEPT
+#Allow DNS for DNS queries containing the word "worldcomunitygrid" 
+iptables -A OUTPUT  -p udp --sport 53 -m string --algo bm --string worldcommunitygrid  -j ACCEPT
+iptables -A INPUT  -p udp --dport 53  -m string --algo bm --string worldcommunitygrid  -j ACCEPT
+iptables -A OUTPUT  -p udp --dport 53  -m string --algo bm --string worldcommunitygrid -j ACCEPT
+iptables -A INPUT  -p udp --sport 53  -m string  --algo bm --string worldcommunitygrid -j ACCEPT
 
-# allow WCG addresses
-iptables -A INPUT -s 198.20.8.246 -j ACCEPT
-iptables -A OUTPUT -d 198.20.8.246 -j ACCEPT
+# allow WCG IPs 
+for IP in  198.20.8.246 198.20.8.241
+do
+    for PORT in 443 80
+    do
+iptables -A INPUT -p tcp --dport $PORT -s $IP -j ACCEPT
+iptables -A OUTPUT -p tcp --sport $PORT -d $IP -j ACCEPT
+done
+done
 
-# allow boinc port 31416
-iptables -A INPUT -p tcp --sport 31416 -j ACCEPT
-iptables -A INPUT -p tcp --dport 31416 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 31416 -j ACCEPT
-iptables -A OUTPUT -p tcp --dport 31416 -j ACCEPT
 
 # display iptables
-
 iptables -L
